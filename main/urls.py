@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from api_phones import views as api_phones_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/get-phone/<int:phone>/', api_phones_views.ApiPhonesRudView.as_view(), name="get-phone")
 ]

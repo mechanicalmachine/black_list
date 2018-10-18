@@ -9,7 +9,7 @@ STATUS_CHOICES = (
 
 
 class PhonesList(models.Model):
-    value = models.CharField(
+    phone = models.CharField(
         max_length=20,
         blank=False,
         verbose_name='Номер телефона'

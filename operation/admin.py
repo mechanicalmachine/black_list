@@ -19,7 +19,7 @@ exclude_from_black_list.short_description = "Исключить из черно�
 
 @admin.register(PhonesList)
 class PhonesListAdmin(admin.ModelAdmin):
-    list_display = ('value', 'added_date', 'added_by', 'reason',
+    list_display = ('phone', 'added_date', 'added_by', 'reason',
                     'status', 'excluded_date', 'excluded_by')
     list_filter = ('status', )
     ordering = ['added_date']
@@ -32,7 +32,7 @@ class PhonesListAdmin(admin.ModelAdmin):
         return False
 
     def save_model(self, request, obj, form, change):
-        if PhonesList.objects.filter(value=obj.value, status=True).first():
+        if PhonesList.objects.filter(phone=obj.phone, status=True).first():
             self.message_user(request, "Номер {} был добавлен ранее".format(obj.value))
         else:
             obj.status = True
