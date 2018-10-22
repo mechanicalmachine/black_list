@@ -1,5 +1,7 @@
 import datetime
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.core.exceptions import ValidationError
+
 from operation.models import PhonesList
 
 
@@ -32,10 +34,12 @@ class PhonesListAdmin(admin.ModelAdmin):
         return False
 
     def save_model(self, request, obj, form, change):
-        if PhonesList.objects.filter(phone=obj.phone, status=True).first():
-            self.message_user(request, "Номер {} был добавлен ранее".format(obj.value))
-        else:
+        if not PhonesList.objects.filter(phone=obj.phone, status=True).first():
             obj.status = True
             if not obj.pk:
                 obj.added_by = request.user
             super().save_model(request, obj, form, change)
+        else:
+            response = "Номер {} был добавлен ранее".format(obj.phone)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, response)
