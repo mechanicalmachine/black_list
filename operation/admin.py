@@ -1,7 +1,5 @@
 import datetime
 from django.contrib import admin, messages
-from django.core.exceptions import ValidationError
-
 from operation.models import PhonesList
 
 
@@ -19,11 +17,25 @@ def exclude_from_black_list(modeladmin, request, queryset):
 exclude_from_black_list.short_description = "Исключить из черного списка"
 
 
+class StatusCategoryListFilter(admin.SimpleListFilter):
+    title = 'Статус'
+    parameter_name = 'status_category'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('in_blacklist', 'Только телефоны в черном списке'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == 'in_blacklist':
+            return queryset.filter(status=True)
+
+
 @admin.register(PhonesList)
 class PhonesListAdmin(admin.ModelAdmin):
     list_display = ('phone', 'added_date', 'added_by', 'reason',
                     'status', 'excluded_date', 'excluded_by')
-    list_filter = ('status', )
+    list_filter = (StatusCategoryListFilter, )
     ordering = ['added_date']
     actions = [exclude_from_black_list]
 
