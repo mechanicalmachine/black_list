@@ -20,5 +20,6 @@ from api_phones import views as api_phones_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/get-phone/<int:phone>/', api_phones_views.ApiPhonesRudView.as_view(), name="get-phone")
+    path('api/check-phone/<int:phone>/', api_phones_views.ApiCheckPhoneView.as_view(), name="get-phone"),
+    path('api/get-all-phones-from-blackist/', api_phones_views.ApiGetPhonesView.as_view(), name="get-phones-list")
 ]

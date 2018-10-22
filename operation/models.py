@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -9,8 +10,13 @@ STATUS_CHOICES = (
 
 
 class PhonesList(models.Model):
+    phone_regex = RegexValidator(regex=r'^\d{9,15}$',
+                                 message="Номер телефона должен соотвтетствовать"
+                                         " следующему формату: 79998887766. "
+                                         "Разрешенная длина от 9 до 15 символов")
     phone = models.CharField(
-        max_length=20,
+        validators=[phone_regex],
+        max_length=15,
         blank=False,
         verbose_name='Номер телефона'
     )
